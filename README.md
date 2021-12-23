@@ -31,3 +31,11 @@ http://localhost:8000/users/2/?format=json
 Especificando o formato XML:
 
 http://localhost:8000/users/2/?format=xml
+
+
+
+
+[0]: http://www.django-rest-framework.org/
+[1]: http://www.django-rest-framework.org/tutorial/1-serialization/
+[2]: https://jpadilla.github.io/django-rest-framework-xml
+[3]: http://pythonclub.com.br/django-rest-framework-serialization.html
