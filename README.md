@@ -16,6 +16,13 @@ $ python manage.py migrate
 $ python manage.py runserver
 ```
 
+Testando acesso a API via terminal
+
+curl -H 'Accept: application/json; indent=4' -u admin:admin http://127.0.0.1:8000/users/
+
+[Autorização e Autencicação] (http://localhost:8000/api-auth/login/) 
+
+
 Para consultar a lista de todos usuários do sistemas:
 
 http://localhost:8000/users/
