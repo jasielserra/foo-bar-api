@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from zipbank.core.models import Item
@@ -8,6 +8,14 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework_xml.parsers import XMLParser
 from rest_framework_xml.renderers import XMLRenderer
+
+
+
+
+def get_itens(request):
+    if request.method == 'GET':
+        itens = list(Item.objects.all().values())
+        return JsonResponse(itens, safe=False)
 
 class JSONResponse(HttpResponse):
     """
@@ -38,6 +46,33 @@ def item_list(request):
             serializer.save()
             return JSONResponse(serializer.data, status=201)
         return JSONResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
+def item_detail(request, pk):
+    """
+    Retrieve, update or delete a Item.
+    """
+    try:
+        item = Item.objects.get(pk=pk)
+    except Item.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = ItemSerializer(item)
+        return JSONResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = ItemSerializer(item, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JSONResponse(serializer.data)
+        return JSONResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        item.delete()
+        return HttpResponse(status=204)
 
 class UserViewSet(viewsets.ModelViewSet):
     """
