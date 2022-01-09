@@ -2,6 +2,8 @@ from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
+
+from zipbank.core.forms import ItemForm
 from zipbank.core.models import Item
 from zipbank.core.serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.parsers import JSONParser
@@ -15,6 +17,14 @@ from rest_framework_xml.renderers import XMLRenderer
 def get_itens(request):
         itens = list(Item.objects.all().values())
         return JsonResponse(itens, safe=False)
+
+def post_item(request):
+    form = ItemForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return JsonResponse(data=form.data, status=201)
+    else:
+        return JsonResponse(data={'message':'Invalid format'}, status=400)
 
 class JSONResponse(HttpResponse):
     """
