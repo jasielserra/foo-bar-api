@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url('item/', views.get_itens),
     url('novo_item', views.post_item),
+    url('atualiza_item', views.put_item),
     url('itens/', views.item_list),
     url('item/<int:pk>/',views.item_detail),
     url('admin/', admin.site.urls),

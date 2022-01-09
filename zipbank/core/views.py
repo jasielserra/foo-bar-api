@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
@@ -25,6 +27,18 @@ def post_item(request):
         return JsonResponse(data=form.data, status=201)
     else:
         return JsonResponse(data={'message':'Invalid format'}, status=400)
+
+def put_item(request, pk):
+    if request.method == 'PUT':
+        item = Item.objects.get(pk=pk)
+        put_data = json.loads(request.body)
+        put_data['id'] = pk
+        form = ItemForm(instance=item, data=put_data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse(data=form.data, status=204)
+        else:
+            return JsonResponse(data={'message': 'Invalid format'}, status=400)
 
 class JSONResponse(HttpResponse):
     """
