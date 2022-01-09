@@ -40,6 +40,16 @@ def put_item(request, pk):
         else:
             return JsonResponse(data={'message': 'Invalid format'}, status=400)
 
+def del_item(request, pk):
+    if request.method == 'DELETE':
+        item = Item.objects.filter(pk=pk).delete()
+    if item[0]:
+        data = {'message': 'Item was deleted with success!'}
+    else:
+        data = {'message': 'Object does not found!'}
+    return JsonResponse(data=data, status=204)
+
+
 class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
