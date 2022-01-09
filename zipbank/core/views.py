@@ -13,7 +13,6 @@ from rest_framework_xml.renderers import XMLRenderer
 
 
 def get_itens(request):
-    if request.method == 'GET':
         itens = list(Item.objects.all().values())
         return JsonResponse(itens, safe=False)
 
